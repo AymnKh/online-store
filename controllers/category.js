@@ -1,6 +1,7 @@
 const categoryModel = require("../models/category");
 const slugify = require("slugify");
 const asyncHandler = require("express-async-handler");
+const ApiErrors = require("../helpers/ApiErrors");
 
 //@desc    Create category
 //@route   POST /api/vl/categorie
@@ -28,11 +29,11 @@ exports.getCategories = asyncHandler(async (req, res) => {
 //@desc    Get category by id
 //@route   GET /api/vl/categorie/:id
 //@access  Public
-exports.getCategory = asyncHandler(async (req, res) => {
+exports.getCategory = asyncHandler(async (req, res, next) => {
   const id = req.params.id;
   const category = await categoryModel.findById(id);
   if (!category) {
-    res.status(400).json({ message: "No category found for this id" });
+    return next(new ApiErrors(`No category founded for this id :${id}`, 400));
   }
   res.status(200).json({ category });
 });
@@ -40,7 +41,7 @@ exports.getCategory = asyncHandler(async (req, res) => {
 //@desc    Update category
 //@route   PUT /api/vl/categorie/:id
 //@access  Private
-exports.updateCategory = asyncHandler(async (req, res) => {
+exports.updateCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const { name } = req.body;
   const updatedCategory = await categoryModel.findOneAndUpdate(
@@ -49,7 +50,7 @@ exports.updateCategory = asyncHandler(async (req, res) => {
     { new: true }
   );
   if (!updatedCategory) {
-    res.status(400).json({ message: "No category found for this id" });
+    return next(new ApiErrors(`No category founded for this id :${id}`, 400));
   }
   res.status(200).json({ updatedCategory });
 });
@@ -57,11 +58,11 @@ exports.updateCategory = asyncHandler(async (req, res) => {
 //@desc    Delete category by id
 //@route   DELETE /api/vl/categorie/:id
 //@access  Private
-exports.deleteCategory = asyncHandler(async (req, res) => {
+exports.deleteCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const category = await categoryModel.findByIdAndDelete(id);
   if (!category) {
-    res.status(400).json({ message: "No category found for this id" });
+    return next(new ApiErrors(`No category founded for this id :${id}`, 400));
   }
   res.status(200).json({ message: "Category deleted" });
 });

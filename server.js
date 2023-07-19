@@ -24,6 +24,15 @@ app.options("*", cors());
 const categoruRoute = require("./routes/category");
 app.use("/api/v1/categories", categoruRoute);
 
+const ApiError = require("./helpers/ApiErrors");
+app.all("*", (req, res, next) => {
+  next(new ApiError(`can't find this route ${req.originalUrl}`, 400));
+});
+
+//error handler middleware
+const globalError = require("./helpers/globalError");
+app.use(globalError);
+
 app.get("/", (req, res) => {
   res.send("Welcome to simple server");
 });
