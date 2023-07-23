@@ -4,7 +4,7 @@ const asyncHandler = require("express-async-handler");
 const ApiErrors = require("../helpers/ApiErrors");
 
 //@desc    Create category
-//@route   POST /api/vl/categorie
+//@route   POST /api/vl/categories
 //@access  Private
 exports.addCategory = asyncHandler(async (req, res) => {
   const name = req.body.name; //get name from body

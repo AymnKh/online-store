@@ -23,6 +23,9 @@ app.options("*", cors());
 //category
 const categoruRoute = require("./routes/category");
 app.use("/api/v1/categories", categoruRoute);
+//subCategory
+const subCategoruRoute = require("./routes/subCategory");
+app.use("/api/v1/sub-categories", subCategoruRoute);
 
 const ApiError = require("./helpers/ApiErrors");
 app.all("*", (req, res, next) => {
